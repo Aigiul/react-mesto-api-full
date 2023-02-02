@@ -1,0 +1,14 @@
+.gallery {
+  padding: 51px 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+  .gallery {
+    padding: 36px 0 0 0;
+  }  
+}

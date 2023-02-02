@@ -1,0 +1,39 @@
+.card {
+  width: 282px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 17px 20px 0;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 0px solid #000000;
+  overflow: hidden;
+  position: relative;
+}
+
+.card:nth-of-type(3n) {
+  margin-right: 0;
+}
+
+@media screen and (max-width: 1023px) {
+  .card:nth-of-type(3n) {
+    margin-right: 17px;
+  }
+  
+  .card {
+    margin: 0 17px 20px 0;
+  }
+ 
+  .card:nth-of-type(2n) {
+    margin-right: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .card:nth-of-type(3n) {
+    margin-right: 0;
+  }
+  
+  .card {
+    margin: 0 0 20px 0;
+  }
+}

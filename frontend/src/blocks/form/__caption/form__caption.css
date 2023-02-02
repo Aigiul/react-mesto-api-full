@@ -1,0 +1,11 @@
+.form__caption {
+  color: #FFFFFF;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+@media screen and (max-width: 767px) {
+  .form__caption {
+    margin: 20px auto 0;
+  }
+}
