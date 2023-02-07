@@ -35,6 +35,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
       <img
         className="card__image"
         src={card.link}
+        alt={card.name}
         onClick={() => {
           onCardClick(card);
         }}

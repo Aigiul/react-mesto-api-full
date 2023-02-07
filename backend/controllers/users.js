@@ -8,7 +8,7 @@ const ConflictError = require('../errors/conflictError');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
-    .then((user) => res.send({ user }))
+    .then((user) => res.send(user))
     .catch(next);
 };
 
@@ -18,7 +18,7 @@ module.exports.getUser = (req, res, next) => {
       throw new NotFoundError('Пользователь по указанному _id не найден.');
     })
     .then((user) => {
-      res.send({ user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -35,7 +35,7 @@ module.exports.getUserInfo = (req, res, next) => {
       throw new NotFoundError('Пользователь по указанному _id не найден.');
     })
     .then((user) => {
-      res.send({ user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -90,7 +90,7 @@ module.exports.updateUser = (req, res, next) => {
     .orFail(() => {
       throw new NotFoundError('Пользователь по указанному _id не найден.');
     })
-    .then((user) => res.send({ user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest('Переданы некорректные данные при обновлении пользователя'));
@@ -114,7 +114,7 @@ module.exports.updateAvatar = (req, res, next) => {
     .orFail(() => {
       throw new NotFoundError('Пользователь по указанному _id не найден.');
     })
-    .then((user) => res.send({ user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest('Переданы некорректные данные при обновлении пользователя'));
@@ -133,7 +133,7 @@ module.exports.login = (req, res, next) => {
         'some-secret-key',
         { expiresIn: '7d' },
       ); // токен будет просрочен через 7 после создания
-      return res.send({ token });
+      return res.status(200).send({ token });
     })
     .catch(next);
 };

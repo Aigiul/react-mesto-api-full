@@ -20,6 +20,7 @@ import fail from "../images/fail.svg";
 
 
 function App() {
+  const [token, setToken] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -35,26 +36,26 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    api
-      .getUserInfo()
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+    if (loggedIn === true) {
+    api.getUserInfo()
+    .then((data) => {
+      setCurrentUser(data);
+    })
+    .catch((err) => {
+      console.error(err);
+    })};
+  }, [loggedIn]);
 
   useEffect(() => {
-    api
-      .getInitialCards()
-      .then((cards) => {
-        setCards(cards);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+    if (loggedIn === true) {
+    api.getInitialCards()
+    .then((cards) => {
+      setCards(cards);
+    })
+    .catch((err) => {
+      console.error(err);
+    })};
+  }, [loggedIn]);
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -62,7 +63,7 @@ function App() {
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api
-      .changeLikeCardStatus(card._id, !isLiked)
+      .changeLikeCardStatus(card._id, !isLiked, token)
       .then((newCard) => {
         setCards((state) =>
           state.map((c) => (c._id === card._id ? newCard : c))
@@ -75,7 +76,7 @@ function App() {
 
   function handleCardDelete(card) {
     api
-      .deleteCard(card._id)
+      .deleteCard(card._id, token)
       .then(() => {
         setCards((state) => state.filter((item) => item._id !== card._id));
       })
@@ -136,7 +137,7 @@ function App() {
 
   function handleAddPlaceSubmit(card) {
     api
-      .addCard(card)
+      .addCard(card, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -148,7 +149,7 @@ function App() {
 
   function handleUpdateUser(userData) {
     api
-      .addProfileInfo(userData)
+      .addProfileInfo(userData, token)
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -160,7 +161,7 @@ function App() {
 
   function handleUpdateAvatar(data) {
     api
-      .newAvatar(data)
+      .newAvatar(data, token)
       .then((item) => {
         setCurrentUser({ ...currentUser, avatar: item.avatar });
         closeAllPopups();
@@ -177,11 +178,11 @@ function App() {
 	// Проверка токена:
 	useEffect(() => {
     const token = localStorage.getItem('token')
-    if (!token) return; // нет токена, значит, не нужно делать запрос
     auth.checkToken(token)
-   .then(result => {
+    .then(result => {
       if (result) {
-        setUserEmail(result.data.email);
+        setUserEmail(result.email);
+        setToken(token);
         setLoggedIn(true);
         history.push('/');
         setCurrentPath('/');
@@ -193,11 +194,12 @@ function App() {
       console.log(`Ошибка входа по токену ${err}`);
       history.push('/sign-in');
     })
-  }, [])
+  }, [history, loggedIn]);
 
 	 // Обработчик завершения:
 	 const handleLogout = () => {
 		localStorage.removeItem('token');
+    setToken('');
 		setUserEmail('');
 		setLoggedIn(false);
 		history.push('/sign-in');
@@ -209,9 +211,8 @@ function App() {
 		 auth.register (email, password)
 		 .then((result) => {
 			 if (result) {
-				 setUserEmail(result.data.email);
+				 setUserEmail(result.email);
 				 setInfoTooltipOpen({ opened: true, success: true });
-				 setLoggedIn(true);
 				 history.push('/sign-in');
 				 setCurrentPath('/sign-in');
 			 }
@@ -231,6 +232,7 @@ function App() {
 		 .then((data) => {
 			 if (data.token) {
 				 localStorage.setItem('token', data.token);
+         setToken(data.token);
 				 setUserEmail(email);
 				 setLoggedIn(true);
 				 history.push('/');
@@ -295,6 +297,7 @@ function App() {
         name="confirmation"
         buttonText="Да"
         isOpen={isConfirmationPopupOpen}
+        onConfirmClick={handleConfirmClick}
         onClose={closeAllPopups}
       >
       </PopupWithForm>

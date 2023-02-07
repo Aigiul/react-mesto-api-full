@@ -6,11 +6,14 @@ const INTERNAL_SERVER_ERROR = require('./errors/status-codes');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/not-found-error');
+const cors = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000, MONGO_URL = 'mongodb://localhost:27017/mestodb' } = process.env;
 
 const app = express();
+
+app.use(cors);
 
 app.use(bodyParser.json());
 
@@ -19,6 +22,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.connect(MONGO_URL);
 
 app.use(requestLogger); // подключаем логгер запросов
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 // роуты не требующие авторизации
 app.post('/signin', celebrate({

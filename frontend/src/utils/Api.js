@@ -2,7 +2,6 @@ import { config } from "./constants.js";
 class Api {
   constructor(host, token, cardId) {
     this._host = host;
-    this._token = token;
     this._cardId = cardId;
     this._getJsonOrError = this._getJsonOrError.bind(this);
     this._getHeaders = this._getHeaders.bind(this);
@@ -16,8 +15,9 @@ class Api {
   }
 
   _getHeaders() {
+    const token = localStorage.getItem('token');
     return {
-      authorization: this._token,
+      authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
   }
