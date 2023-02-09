@@ -271,6 +271,7 @@ function App() {
         	onAddPlace={handleAddPlaceClick}
         	onCardClick={handleCardClick}
         	onCardLike={handleCardLike}
+          onConfirmClick={handleConfirmClick}
         	onCardDelete={handleCardDelete}
         	cards={cards}
         	onSubmit={handleAddPlaceSubmit}
@@ -297,7 +298,6 @@ function App() {
         name="confirmation"
         buttonText="Да"
         isOpen={isConfirmationPopupOpen}
-        onConfirmClick={handleConfirmClick}
         onClose={closeAllPopups}
       >
       </PopupWithForm>
