@@ -1,7 +1,9 @@
 const allowedCors = [
-  'https://praktikum.tk',
-  'http://praktikum.tk',
-  'http://localhost:3001',
+  'https://mesto.nasr.nomoredomains.rocks',
+  'http://mesto.nasr.nomoredomains.rocks',
+  'https://api.mesto.nasr.nomoredomains.rocks',
+  'http://api.mesto.nasr.nomoredomains.rocks',
+  'http://localhost:3000',
 ];
 
 // Значение для заголовка Access-Control-Allow-Methods по умолчанию (разрешены все типы запросов)
